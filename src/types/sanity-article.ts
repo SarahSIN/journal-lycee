@@ -1,25 +1,37 @@
-// Type pour les articles récupérés depuis Sanity
-export type SanityArticle = {
+import { PortableTextBlock } from '@portabletext/types';
+
+// 1. IMAGE TYPE
+export interface SanityImageAsset {
+  _ref: string;
+  _type: 'reference';
+  url?: string;
+}
+
+// 2. SLUG TYPE
+export interface SanitySlug {
+  current: string;
+  _type: 'slug';
+}
+
+// 3. ARTICLE TYPE
+export interface SanityArticle {
   _id: string;
+  _type: 'article';
   title: string;
-  slug?: { current: string };
-  typeArticle: 'visuel' | 'podcast';
+  slug: SanitySlug;
   mainImage?: {
-    asset: {
-      _ref: string;
-      _type: 'reference';
-    };
-    url?: string;
+    asset: SanityImageAsset;
+    alt?: string;
   };
-  audioFile?: {
-    asset: {
-      _ref: string;
-      _type: 'reference';
-    };
-    url?: string;
-  };
-  imageUrl?: string;
+  description?: string;
+  excerpt?: string;
+  body: PortableTextBlock[];
+  publishedAt?: string;
   category?: string;
-  editionTitle?: string;
-  author?: string;
-};
+  author?: {
+    name: string;
+    image?: {
+      asset: SanityImageAsset;
+    };
+  };
+}

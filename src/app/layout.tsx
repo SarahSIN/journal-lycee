@@ -1,35 +1,39 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter, Merriweather } from 'next/font/google'
+import './globals.css'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter' 
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const merriweather = Merriweather({ 
+  weight: ['400', '700'], 
+  subsets: ['latin'], 
+  variable: '--font-merriweather' 
+})
 
 export const metadata: Metadata = {
-  title: "Journal du Lycée",
-  description: "Le journal de notre lycée",
-};
+  title: 'Le Journal du Lycée',
+  description: 'Le journal officiel de notre lycée',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html
-      lang="fr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        {children}
+    <html lang="fr" className={`${inter.variable} ${merriweather.variable}`}>
+      <body className="bg-slate-900 text-white min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-grow">
+          {children}
+        </div>
+        <Footer />
       </body>
     </html>
-  );
+  )
 }

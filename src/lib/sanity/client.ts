@@ -1,8 +1,17 @@
-import { createClient } from 'next-sanity'
+import { createClient as createSanityClient } from 'next-sanity';
 
-export const client = createClient({
-  projectId: 'mkmaq3z0', // Hardcoded projectId as requested
-  dataset: 'production', // Hardcoded dataset value
-  apiVersion: '2024-01-01', // Utilisez la dernière version de l'API Sanity
-  useCdn: process.env.NODE_ENV === 'production', // Utilisez le CDN en production
-})
+// 1. SANITY CLIENT CONFIGURATION
+export const sanityConfig = {
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'mkmaq3z0',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  useCdn: process.env.NODE_ENV === 'production',
+};
+
+// 2. CREATE SANITY CLIENT
+export function createClient() {
+  return createSanityClient(sanityConfig);
+}
+
+// 3. EXPORT DEFAULT CLIENT
+export const client = createClient();

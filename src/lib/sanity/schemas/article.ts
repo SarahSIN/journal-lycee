@@ -29,6 +29,7 @@ export default defineType({
         list: [
           { title: 'Visuel', value: 'visuel' },
           { title: 'Podcast', value: 'podcast' },
+          { title: 'Sondage', value: 'poll' },
         ],
       },
       validation: (Rule) => Rule.required(),
@@ -48,6 +49,20 @@ export default defineType({
         }
         return true
       }),
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Galerie d\'Images',
+      type: 'array',
+      of: [{ 
+        type: 'image',
+        options: {
+          hotspot: true
+        }
+      }],
+      options: {
+        layout: 'grid'
+      }
     }),
     defineField({
       name: 'pdfFile',
@@ -100,6 +115,20 @@ export default defineType({
       to: [{ type: 'edition' }],
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'embedCode',
+      title: 'Code d\'intégration du sondage',
+      type: 'text',
+      description: 'Collez ici le code d\'intégration du formulaire Google Forms',
+      hidden: ({ document }) => document?.typeArticle !== 'poll',
+      validation: (Rule) => Rule.custom((value, context) => {
+        const typeArticle = context.document?.typeArticle
+        if (typeArticle === 'poll' && !value) {
+          return 'Un code d\'intégration est requis pour un article de type Sondage'
+        }
+        return true
+      }),
+    }),
   ],
   preview: {
     select: {
@@ -112,7 +141,7 @@ export default defineType({
       const { title, author, media, type } = selection
       return {
         title,
-        subtitle: `${type === 'podcast' ? 'Podcast' : 'Article Visuel'} - Par ${author}`,
+        subtitle: type === 'podcast' ? 'Podcast' : type === 'poll' ? 'Sondage' : 'Article Visuel' + ` - Par ${author}`,
         media,
       }
     },

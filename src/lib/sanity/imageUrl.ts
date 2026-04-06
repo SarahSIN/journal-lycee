@@ -1,18 +1,33 @@
-import imageUrlBuilder from '@sanity/image-url'
-import { client } from './client'
+import imageUrlBuilder from '@sanity/image-url';
+import { client } from './client';
+import { SanityImageAsset } from '@/types/sanity-article';
 
-// Créer un constructeur d'URL d'image pour Sanity
-const builder = imageUrlBuilder(client)
+// 1. CREATE IMAGE URL BUILDER
+const builder = imageUrlBuilder(client);
 
-// Fonction utilitaire pour générer des URL d'image
-export function urlForImage(source: { asset?: { _ref: string } } | undefined) {
-  if (!source || !source.asset) {
-    return {
-      url: () => '',
-      width: () => 0,
-      height: () => 0
-    }
+// 2. URL FOR IMAGE FUNCTION
+export function urlForImage(source: { _ref: string; _type: 'reference' }) {
+  return builder.image(source);
+}
+
+// 3. SAFE IMAGE URL EXTRACTION
+export function getSafeImageUrl(
+  image?: { 
+    asset?: { 
+      _ref: string; 
+      _type: 'reference' 
+    } 
+  }
+): string {
+  if (!image?.asset?._ref) {
+    return '/placeholder-image.jpg'; // Fallback placeholder
   }
 
-  return builder.image(source)
+  try {
+    const url = builder.image(image.asset).url();
+    return url || '/placeholder-image.jpg';
+  } catch (error) {
+    console.error('Image URL generation error:', error);
+    return '/placeholder-image.jpg';
+  }
 }

@@ -1,23 +1,27 @@
-// 1. IMPORTS
-import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-// 2. COMPOSANT
-const Header: React.FC = () => {
+export function Header() {
   return (
-    <header className="bg-blue-600 text-white p-4">
-      <nav className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold">
-          Journal du Lycée
+    <header className="bg-slate-900 py-4">
+      <div className="container mx-auto flex flex-col items-center">
+        <Link href="/" className="mb-4">
+          <Image 
+            src="/logo-ozennien.jpeg" 
+            alt="Logo du Journal du Lycée" 
+            width={150} 
+            height={150} 
+            className="rounded-full"
+          />
         </Link>
-        <ul className="flex space-x-4">
-          <li><Link href="/articles">Articles</Link></li>
-          <li><Link href="/about">À propos</Link></li>
-          <li><Link href="/contact">Contact</Link></li>
-        </ul>
-      </nav>
+        <nav>
+          <ul className="flex space-x-8 text-white">
+            <li><Link href="/articles">Articles</Link></li>
+            <li><Link href="/podcasts">Podcasts</Link></li>
+            <li><Link href="/sondages">Sondages</Link></li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
-};
-
-export default Header;
+}

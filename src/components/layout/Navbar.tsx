@@ -1,43 +1,35 @@
-'use client';
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+// Configuration des liens de navigation
+const NAV_LINKS = [
+  { href: '/articles', label: 'Articles' },
+  { href: '/podcasts', label: 'Podcasts' },
+  { href: '/sondages', label: 'Sondages' }
+]
 
-const Navbar = () => {
-  const pathname = usePathname();
-
-  // Navigation links with their corresponding paths
-  const navLinks = [
-    { name: 'Accueil', path: '/' },
-    { name: 'Archives', path: '/archives' },
-    { name: 'À propos', path: '/about' }
-  ];
+export default function Navbar() {
+  const pathname = usePathname()
 
   return (
-    <nav 
-      className="w-full py-6 px-4" 
-      aria-label="Navigation principale"
-    >
-      {/* Grand titre central avec une typographie élégante et minimaliste */}
-      <h1 className="text-center text-2xl font-bold">Journal du Lycée</h1>
-      
-      {/* Navigation links */}
-      <div className="flex justify-center space-x-4 mt-4">
-        {navLinks.map((link) => (
-          <Link 
-            key={link.path} 
-            href={link.path} 
-            className={`
-              ${pathname === link.path ? 'text-primary font-bold' : 'text-gray-600'}
-              hover:text-primary transition-colors duration-300
-            `}
-          >
-            {link.name}
-          </Link>
+    <nav className="bg-white bg-opacity-20 backdrop-blur-lg rounded-full px-6 py-3 max-w-md mx-auto mb-8 shadow-lg">
+      <ul className="flex justify-between items-center space-x-4">
+        {NAV_LINKS.map((link) => (
+          <li key={link.href}>
+            <Link 
+              href={link.href} 
+              className={`
+                font-roboto text-white transition-all duration-300 
+                ${pathname === link.href 
+                  ? 'font-bold underline' 
+                  : 'hover:text-gray-200 hover:opacity-80'}
+              `}
+            >
+              {link.label}
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </nav>
-  );
-};
-
-export default Navbar;
+  )
+}

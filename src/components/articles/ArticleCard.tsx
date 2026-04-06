@@ -1,44 +1,58 @@
-// 1. IMPORTS
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SanityArticle } from '@/types/sanity-article';
+import { urlForImage } from '@/lib/sanity/imageUrl';
 
-// 2. TYPES
-type ArticleCardProps = {
+interface ArticleCardProps {
   article: SanityArticle;
-};
+}
 
-// 3. COMPOSANT
-const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
-  // Vérification robuste du slug
-  const slugValue = article.slug?.current || article.slug;
+export function ArticleCard({ article }: ArticleCardProps) {
+  const imageUrl = article.mainImage?.asset 
+    ? urlForImage(article.mainImage.asset).width(400).height(250).url() 
+    : '/placeholder-image.jpg';
 
-  // Avec slug, on fait un lien normal
   return (
     <Link 
-      href={`/articles/${slugValue}`} 
-      className="block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      href={`/articles/${article.slug.current}`} 
+      className="block"
     >
-      {article.imageUrl && (
-        <div className="relative w-full h-48">
-          <Image 
-            src={article.imageUrl} 
-            alt={article.title} 
-            fill 
-            className="object-cover"
-          />
-        </div>
-      )}
-      <div className="p-4">
-        <h3 className="text-xl font-bold mb-2">{article.title}</h3>
-        <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
-          {article.category && <span>{article.category}</span>}
-          {article.editionTitle && <span>{article.editionTitle}</span>}
+      <div className="
+        bg-black/30 
+        backdrop-blur-md 
+        border 
+        border-white/20 
+        rounded-xl 
+        overflow-hidden 
+        transition-all 
+        duration-300 
+        hover:scale-[1.02] 
+        hover:shadow-xl
+      ">
+        <Image
+          src={imageUrl}
+          alt={article.title}
+          width={400}
+          height={250}
+          className="w-full h-48 object-cover"
+        />
+        <div className="p-4">
+          <h2 className="
+            text-white 
+            font-serif 
+            text-xl 
+            font-bold 
+            mb-2
+          ">
+            {article.title}
+          </h2>
+          {article.description && (
+            <p className="text-gray-300 text-sm">
+              {article.description}
+            </p>
+          )}
         </div>
       </div>
     </Link>
   );
-};
-
-export default ArticleCard;
+}
