@@ -22,18 +22,60 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'author',
-      title: 'Auteur',
+      name: 'typeArticle',
+      title: 'Type d\'Article',
       type: 'string',
+      options: {
+        list: [
+          { title: 'Visuel', value: 'visuel' },
+          { title: 'Podcast', value: 'podcast' },
+        ],
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'mainImage',
-      title: 'Image principale',
+      title: 'Fichier Visuel (PNG, JPEG, WebP, etc.)',
       type: 'image',
       options: {
         hotspot: true,
+        accept: 'image/png, image/jpeg, image/jpg, image/webp, image/gif, image/svg+xml'
       },
+      validation: (Rule) => Rule.custom((value, context) => {
+        const typeArticle = context.document?.typeArticle
+        if (typeArticle === 'visuel' && !value) {
+          return 'Un fichier visuel est requis pour un article de type Visuel'
+        }
+        return true
+      }),
+    }),
+    defineField({
+      name: 'pdfFile',
+      title: 'Fichier PDF (optionnel)',
+      type: 'file',
+      options: {
+        accept: '.pdf'
+      },
+    }),
+    defineField({
+      name: 'audioFile',
+      title: 'Fichier Audio du Podcast',
+      type: 'file',
+      options: {
+        accept: 'audio/*',
+      },
+      validation: (Rule) => Rule.custom((value, context) => {
+        const typeArticle = context.document?.typeArticle
+        if (typeArticle === 'podcast' && !value) {
+          return 'Un fichier audio est requis pour un article de type Podcast'
+        }
+        return true
+      }),
+    }),
+    defineField({
+      name: 'author',
+      title: 'Auteur',
+      type: 'string',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -58,24 +100,19 @@ export default defineType({
       to: [{ type: 'edition' }],
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: 'content',
-      title: 'Contenu',
-      type: 'blockContent',
-      validation: (Rule) => Rule.required(),
-    }),
   ],
   preview: {
     select: {
       title: 'title',
       author: 'author',
       media: 'mainImage',
+      type: 'typeArticle',
     },
     prepare(selection) {
-      const { title, author, media } = selection
+      const { title, author, media, type } = selection
       return {
         title,
-        subtitle: `Par ${author}`,
+        subtitle: `${type === 'podcast' ? 'Podcast' : 'Article Visuel'} - Par ${author}`,
         media,
       }
     },

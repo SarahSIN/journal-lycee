@@ -11,9 +11,13 @@ type ArticleCardProps = {
 
 // 3. COMPOSANT
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+  // Vérification robuste du slug
+  const slugValue = article.slug?.current || article.slug;
+
+  // Avec slug, on fait un lien normal
   return (
     <Link 
-      href={`/articles/${article._id}`} 
+      href={`/articles/${slugValue}`} 
       className="block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       {article.imageUrl && (
