@@ -1,23 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Merriweather } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
-
-const inter = Inter({ 
-  subsets: ['latin'], 
-  variable: '--font-inter' 
-})
-
-const merriweather = Merriweather({ 
-  weight: ['400', '700'], 
-  subsets: ['latin'], 
-  variable: '--font-merriweather' 
-})
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'Le Journal du Lycée',
-  description: 'Le journal officiel de notre lycée',
+  title: "L'Ozennien - Journal du Lycée",
+  description: 'Le journal officiel du lycée - Articles, Podcasts et Sondages',
 }
 
 export default function RootLayout({
@@ -26,8 +14,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${merriweather.variable}`}>
-      <body className="bg-slate-900 text-white min-h-screen flex flex-col">
+    <html lang="fr">
+      <body 
+        className="min-h-screen flex flex-col"
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)',
+          backgroundAttachment: 'fixed',
+        }}
+      >
         <Header />
         <div className="flex-grow">
           {children}
