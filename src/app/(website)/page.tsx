@@ -13,14 +13,9 @@ export default async function HomePage() {
       </h1>
 
       {/* Grille d'articles avec effet Glassmorphism */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto p-8">
         {articles.map((article) => (
-          <div 
-            key={article._id}
-            className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl"
-          >
-            <ArticleCard article={article} />
-          </div>
+          <ArticleCard key={article._id} article={article} />
         ))}
       </div>
     </main>

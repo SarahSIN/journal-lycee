@@ -20,9 +20,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
       href={`/articles/${article.slug.current}`}
       className="block group h-full"
     >
-      <article className="h-full flex flex-col transition-all duration-300 hover:scale-105">
+      <article className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all h-full flex flex-col">
         {/* Image */}
-        <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
+        <div className="relative h-48 w-full overflow-hidden rounded-xl mb-4">
           <Image
             src={imageUrl}
             alt={article.title}
@@ -33,8 +33,8 @@ export function ArticleCard({ article }: ArticleCardProps) {
         </div>
         
         {/* Contenu */}
-        <div className="flex-1 p-4">
-          <h2 className="text-white font-bold text-xl mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors duration-300">
+        <div className="flex-1">
+          <h2 className="text-2xl font-serif text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors duration-300">
             {article.title}
           </h2>
           
