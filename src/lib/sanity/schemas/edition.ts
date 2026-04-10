@@ -7,37 +7,77 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Titre',
+      title: 'Titre de l\'édition',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: Rule => Rule.required()
     }),
     defineField({
-      name: 'publishedAt',
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96
+      },
+      validation: Rule => Rule.required()
+    }),
+    defineField({
+      name: 'publishDate',
       title: 'Date de publication',
-      type: 'datetime',
-      validation: (Rule) => Rule.required(),
+      type: 'date',
+      validation: Rule => Rule.required()
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text'
     }),
     defineField({
       name: 'coverImage',
       title: 'Image de couverture',
       type: 'image',
       options: {
-        hotspot: true, // Permet de définir un point focal pour le recadrage
-      },
-      validation: (Rule) => Rule.required(),
+        hotspot: true
+      }
     }),
+    defineField({
+      name: 'articles',
+      title: 'Articles',
+      type: 'array',
+      of: [{ 
+        type: 'reference', 
+        to: [{ type: 'article' }] 
+      }]
+    }),
+    defineField({
+      name: 'pdfVersion',
+      title: 'Version PDF complète',
+      type: 'file',
+      options: {
+        accept: '.pdf'
+      }
+    }),
+    defineField({
+      name: 'views',
+      title: 'Nombre de vues',
+      type: 'number',
+      initialValue: 0
+    })
   ],
   preview: {
     select: {
       title: 'title',
       media: 'coverImage',
+      date: 'publishDate',
+      articleCount: 'articles.length'
     },
     prepare(selection) {
-      const { title, media } = selection
+      const { title, media, date, articleCount } = selection
       return {
         title,
         media,
+        subtitle: `${date} - ${articleCount || 0} article(s)`
       }
-    },
-  },
+    }
+  }
 })

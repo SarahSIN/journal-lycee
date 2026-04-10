@@ -1,9 +1,19 @@
-import edition from './edition'
-import article from './article'
-import blockContent from './blockContent'
+import { type SchemaTypeDefinition } from 'sanity'
 
-export const schemaTypes = [
-  edition,
+// Importer les schémas
+import article from './article'
+import author from './author'
+import category from './category'
+import blockContent from './blockContent'
+import edition from './edition'
+
+// Liste des schémas
+export const schemaTypes: SchemaTypeDefinition[] = [
   article,
+  author,
+  category,
   blockContent,
+  edition
 ]
+
+export default schemaTypes

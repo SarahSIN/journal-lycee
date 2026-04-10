@@ -1,43 +1,74 @@
-// 1. TYPES
-export type Season = 'winter' | 'spring' | 'summer' | 'autumn';
+// Définition des thèmes saisonniers pour le journal du lycée Ozenne
 
-// 2. SEASONAL THEME CONFIGURATION
-export const seasonalThemes = {
-  winter: {
-    background: 'bg-gradient-to-br from-blue-900 via-indigo-800 to-violet-900',
-    textPrimary: 'text-blue-50',
-    textSecondary: 'text-blue-200',
-    cardBackground: 'bg-white/10 backdrop-blur-md',
-    accentColor: 'text-blue-300',
-  },
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
+export interface SeasonalTheme {
+  name: string
+  primaryColor: string
+  secondaryColor: string
+  backgroundColor: string
+  textColor: string
+  accentColor: string
+}
+
+export const seasonalThemes: Record<Season, SeasonalTheme> = {
   spring: {
-    background: 'bg-gradient-to-br from-green-200 via-emerald-300 to-teal-300',
-    textPrimary: 'text-green-900',
-    textSecondary: 'text-green-700',
-    cardBackground: 'bg-white/20 backdrop-blur-md',
-    accentColor: 'text-emerald-600',
+    name: 'Printemps',
+    primaryColor: '#4CAF50',
+    secondaryColor: '#81C784',
+    backgroundColor: '#E8F5E9',
+    textColor: '#1B5E20',
+    accentColor: '#A5D6A7'
   },
   summer: {
-    background: 'bg-gradient-to-br from-yellow-200 via-orange-300 to-red-400',
-    textPrimary: 'text-orange-900',
-    textSecondary: 'text-orange-700',
-    cardBackground: 'bg-white/30 backdrop-blur-md',
-    accentColor: 'text-red-600',
+    name: 'Été',
+    primaryColor: '#2196F3',
+    secondaryColor: '#64B5F6',
+    backgroundColor: '#E3F2FD',
+    textColor: '#0D47A1',
+    accentColor: '#90CAF9'
   },
   autumn: {
-    background: 'bg-gradient-to-br from-orange-600 via-amber-700 to-red-800',
-    textPrimary: 'text-orange-50',
-    textSecondary: 'text-orange-200',
-    cardBackground: 'bg-white/15 backdrop-blur-md',
-    accentColor: 'text-amber-400',
+    name: 'Automne',
+    primaryColor: '#FF5722',
+    secondaryColor: '#FF8A50',
+    backgroundColor: '#FBE9E7',
+    textColor: '#BF360C',
+    accentColor: '#FFAB91'
+  },
+  winter: {
+    name: 'Hiver',
+    primaryColor: '#9C27B0',
+    secondaryColor: '#BA68C8',
+    backgroundColor: '#F3E5F5',
+    textColor: '#4A148C',
+    accentColor: '#E1BEE7'
   }
-};
+}
 
-// 3. UTILITY FUNCTIONS
 export function getCurrentSeason(): Season {
-  const month = new Date().getMonth();
-  if (month >= 2 && month <= 4) return 'spring';
-  if (month >= 5 && month <= 7) return 'summer';
-  if (month >= 8 && month <= 10) return 'autumn';
-  return 'winter';
+  const currentMonth = new Date().getMonth()
+  
+  if (currentMonth >= 2 && currentMonth <= 4) return 'spring'
+  if (currentMonth >= 5 && currentMonth <= 7) return 'summer'
+  if (currentMonth >= 8 && currentMonth <= 10) return 'autumn'
+  
+  return 'winter'
+}
+
+export function getCurrentSeasonalTheme(): SeasonalTheme {
+  return seasonalThemes[getCurrentSeason()]
+}
+
+export function applySeasonalTheme(theme: SeasonalTheme) {
+  document.documentElement.style.setProperty('--primary-color', theme.primaryColor)
+  document.documentElement.style.setProperty('--secondary-color', theme.secondaryColor)
+  document.documentElement.style.setProperty('--background-color', theme.backgroundColor)
+  document.documentElement.style.setProperty('--text-color', theme.textColor)
+  document.documentElement.style.setProperty('--accent-color', theme.accentColor)
+}
+
+export function initSeasonalTheme() {
+  const currentTheme = getCurrentSeasonalTheme()
+  applySeasonalTheme(currentTheme)
 }

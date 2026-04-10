@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Titre',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'slug',
@@ -17,133 +17,82 @@ export default defineType({
       type: 'slug',
       options: {
         source: 'title',
-        maxLength: 96,
+        maxLength: 96
       },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'typeArticle',
-      title: 'Type d\'Article',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Visuel', value: 'visuel' },
-          { title: 'Podcast', value: 'podcast' },
-          { title: 'Sondage', value: 'poll' },
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'mainImage',
-      title: 'Fichier Visuel (PNG, JPEG, WebP, etc.)',
-      type: 'image',
-      options: {
-        hotspot: true,
-        accept: 'image/png, image/jpeg, image/jpg, image/webp, image/gif, image/svg+xml'
-      },
-      validation: (Rule) => Rule.custom((value, context) => {
-        const typeArticle = context.document?.typeArticle
-        if (typeArticle === 'visuel' && !value) {
-          return 'Un fichier visuel est requis pour un article de type Visuel'
-        }
-        return true
-      }),
-    }),
-    defineField({
-      name: 'gallery',
-      title: 'Galerie d\'Images',
-      type: 'array',
-      of: [{ 
-        type: 'image',
-        options: {
-          hotspot: true
-        }
-      }],
-      options: {
-        layout: 'grid'
-      }
-    }),
-    defineField({
-      name: 'pdfFile',
-      title: 'Fichier PDF (optionnel)',
-      type: 'file',
-      options: {
-        accept: '.pdf'
-      },
-    }),
-    defineField({
-      name: 'audioFile',
-      title: 'Fichier Audio du Podcast',
-      type: 'file',
-      options: {
-        accept: 'audio/*',
-      },
-      validation: (Rule) => Rule.custom((value, context) => {
-        const typeArticle = context.document?.typeArticle
-        if (typeArticle === 'podcast' && !value) {
-          return 'Un fichier audio est requis pour un article de type Podcast'
-        }
-        return true
-      }),
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'author',
       title: 'Auteur',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'category',
-      title: 'Catégorie',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Sport', value: 'sport' },
-          { title: 'Culture', value: 'culture' },
-          { title: 'Vie Scolaire', value: 'vie_scolaire' },
-          { title: 'Actualités', value: 'actualites' },
-          { title: 'Opinion', value: 'opinion' },
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'edition',
-      title: 'Édition',
       type: 'reference',
-      to: [{ type: 'edition' }],
-      validation: (Rule) => Rule.required(),
+      to: { type: 'author' }
     }),
     defineField({
-      name: 'embedCode',
-      title: 'Code d\'intégration du sondage',
-      type: 'text',
-      description: 'Collez ici le code d\'intégration du formulaire Google Forms',
-      hidden: ({ document }) => document?.typeArticle !== 'poll',
-      validation: (Rule) => Rule.custom((value, context) => {
-        const typeArticle = context.document?.typeArticle
-        if (typeArticle === 'poll' && !value) {
-          return 'Un code d\'intégration est requis pour un article de type Sondage'
-        }
-        return true
-      }),
+      name: 'mainImage',
+      title: 'Image principale',
+      type: 'image',
+      options: {
+        hotspot: true
+      }
     }),
+    defineField({
+      name: 'categories',
+      title: 'Rubriques',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'category' } }]
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Mots-clés',
+      type: 'array',
+      of: [{ type: 'string' }]
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Publié le',
+      type: 'datetime'
+    }),
+    defineField({
+      name: 'body',
+      title: 'Contenu',
+      type: 'blockContent'
+    }),
+    defineField({
+      name: 'pdfAttachment',
+      title: 'Fichier PDF',
+      type: 'file',
+      options: {
+        accept: '.pdf'
+      }
+    }),
+    defineField({
+      name: 'podcastLink',
+      title: 'Lien du Podcast',
+      type: 'url'
+    }),
+    defineField({
+      name: 'views',
+      title: 'Nombre de vues',
+      type: 'number',
+      initialValue: 0
+    }),
+    defineField({
+      name: 'likes',
+      title: 'Likes',
+      type: 'number',
+      initialValue: 0
+    })
   ],
+
   preview: {
     select: {
       title: 'title',
-      author: 'author',
-      media: 'mainImage',
-      type: 'typeArticle',
+      author: 'author.name',
+      media: 'mainImage'
     },
     prepare(selection) {
-      const { title, author, media, type } = selection
-      return {
-        title,
-        subtitle: type === 'podcast' ? 'Podcast' : type === 'poll' ? 'Sondage' : 'Article Visuel' + ` - Par ${author}`,
-        media,
-      }
-    },
-  },
+      const { author } = selection
+      return { ...selection, subtitle: author && `par ${author}` }
+    }
+  }
 })
