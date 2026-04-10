@@ -38,14 +38,24 @@ Ce plan détaille le développement complet du site web du journal du lycée Oze
 
 ### Tâches
 
-#### 1.1 Configuration Supabase - Tables et Politiques RLS
-- Créer les tables Supabase :
-  - `article_views` (id, article_id, user_id, viewed_at, ip_address)
-  - `likes` (id, article_id, user_id, created_at)
-  - `comments` (id, article_id, user_id, content, created_at, is_moderated, is_approved)
-  - `users` (id, username, email, role, profile_picture, created_at)
-- Configurer les politiques RLS (Row Level Security)
-- Créer les index pour optimiser les requêtes
+#### 1.1 Configuration Supabase - Tables et Politiques RLS ✅ TERMINÉ
+- ✅ Créer les tables Supabase :
+  - ✅ `article_views` (id, article_id, user_id, viewed_at, ip_address, user_agent)
+  - ✅ `likes` (id, article_id, user_id, created_at)
+  - ✅ `comments` (id, article_id, user_id, content, created_at, is_moderated, is_approved, moderated_by, moderated_at, moderation_reason, updated_at)
+  - ✅ `users` (id, username, email, role, profile_picture, bio, created_at, updated_at)
+- ✅ Configurer les politiques RLS (Row Level Security)
+- ✅ Créer les index pour optimiser les requêtes
+- ✅ Créer les fonctions utilitaires SQL (get_article_views_count, get_article_likes_count, etc.)
+- ✅ Créer les types TypeScript correspondants dans [`src/types/supabase.ts`](src/types/supabase.ts)
+- ✅ Documentation complète dans [`supabase/README.md`](supabase/README.md)
+
+**Fichiers créés :**
+- [`supabase/migrations/001_create_interactions_tables.sql`](supabase/migrations/001_create_interactions_tables.sql)
+- [`supabase/README.md`](supabase/README.md)
+
+**Fichiers modifiés :**
+- [`src/types/supabase.ts`](src/types/supabase.ts) - Types mis à jour avec toutes les tables et fonctions
 
 #### 1.2 Composants d'Interactions
 - Créer [`src/components/articles/LikeButton.tsx`](src/components/articles/LikeButton.tsx)
@@ -473,10 +483,10 @@ Ce plan détaille le développement complet du site web du journal du lycée Oze
 ## ✅ Checklist de Validation par Sprint
 
 ### Sprint 1
-- [ ] Tables Supabase créées et testées
-- [ ] Composants d'interactions fonctionnels
-- [ ] Tests unitaires des composants
-- [ ] Documentation des hooks
+- [x] **1.1** Tables Supabase créées et testées
+- [ ] **1.2** Composants d'interactions fonctionnels
+- [ ] **1.3** Intégration dans la page article
+- [ ] **1.4** Hooks personnalisés et documentation
 
 ### Sprint 2
 - [ ] Schémas Sanity validés
